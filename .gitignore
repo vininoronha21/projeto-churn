@@ -1,0 +1,8 @@
+todo.md
+t2t.py
+__pycache__/
+.DS_Store
+env/
+venv/
+.streamlit/
+.vscode/
