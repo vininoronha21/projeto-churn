@@ -59,3 +59,35 @@ def validar_dados(df):
     return False, colunas_faltantes
   
   return True, []
+
+def calcular_metricas(df):
+  """
+  Calcula as métricas principais do dashboard
+  
+  Args:
+    df: DataFrame com os dados de clientes
+
+  Returns:
+    dict: Dicionário com as métricas calculadas
+  """
+  total_clientes = len(df)
+
+  # Previne divisão por zero
+  if total_clientes == 0:
+    return {
+        'total': 0,
+        'cancelados': 0,
+        'taxa_churn': 0,
+        'receita_perdida': 0
+    }
+  
+  clientes_cancelados = df[df['canceled'] == CANCELADOS].shape[0]
+  taxa_churn = (clientes_cancelados / total_clientes) * 100
+  receita_perdida = df[df['caneled'] == CANCELADOS]['total_spent'].sum()
+
+  return {
+      'total': total_clientes,
+      'cancelados': clientes_cancelados,
+      'taxa_churn': taxa_churn,
+      'receita_perdida': receita_perdida
+  }
