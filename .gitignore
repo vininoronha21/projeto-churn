@@ -1,5 +1,5 @@
 todo.md
-t2t.py
+tests.py
 __pycache__/
 .DS_Store
 env/

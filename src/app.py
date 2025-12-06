@@ -91,3 +91,18 @@ def calcular_metricas(df):
       'taxa_churn': taxa_churn,
       'receita_perdida': receita_perdida
   }
+
+def formatar_moeda(valor):
+  """
+  Formata valor em reais (R$)
+
+  Args:
+    valor: Valor numérico a ser formatado
+
+  Returns:
+    str: Valor formatado como moeda BRL 
+  """
+  
+  valor_formatado = f"{valor:,.2f}" # Utilizando f-string para formatar com 2 casas decimais e separadores
+  valor_formatado = valor_formatado.replace(',', '_').replace('.', ',').replace('_', '.') # Utilizando replace para converter ao padrao brasileiro (1.000,00)
+  return f"R${valor_formatado}"
