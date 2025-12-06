@@ -23,3 +23,39 @@ COLUNAS_NECESSARIAS = [
 
 ## Configurações Iniciais
 st.set_page_config(page_title="Dashboard de Churn", layout="wide")
+
+
+## Funções Auxiliares
+@st.cache_data
+def carregar_dados():
+  """
+  Carrega os dados de cancelamento do .CSV
+
+  Returns:
+    pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
+  """
+  try:
+    dados = pd.read_csv("cancelamentos.csv")
+    return dados
+  except FileNotFoundError:
+    return None
+
+def validar_dados(df):
+  """
+  Verifica se o DataFrame possui todas as colunas necessárias
+
+  Args:
+    df: DataFrame a ser validado
+  
+  Returns:
+    tuple: (bool, list) - (é válido?, lista de colunas faltantes)
+  """
+  if df is None:
+    return False, []
+  
+  colunas_faltantes = [col for col in COLUNAS_NECESSARIAS if col not in df.columns]
+
+  if colunas_faltantes:
+    return False, colunas_faltantes
+  
+  return True, []
