@@ -35,7 +35,7 @@ def carregar_dados():
     pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
   """
   try:
-    dados = pd.read_csv("cancelamentos.csv")
+    dados = pd.read_csv("data/cancelamentos.csv")
     return dados
   except FileNotFoundError:
     return None
