@@ -106,3 +106,21 @@ def formatar_moeda(valor):
   valor_formatado = f"{valor:,.2f}" # Utilizando f-string para formatar com 2 casas decimais e separadores
   valor_formatado = valor_formatado.replace(',', '_').replace('.', ',').replace('_', '.') # Utilizando replace para converter ao padrao brasileiro (1.000,00)
   return f"R${valor_formatado}"
+
+def calcular_insight(df):
+
+  # Médias de atraso
+  media_atraso_cancelados = df[df['canceled'] == CANCELADOS]['days_late'].mean()
+  media_atraso_ativos = df[df['canceled'] == ATIVO]['days_late'].mean()
+
+  # Análise por contrato
+  churn_contrato = df.groupby("contract_duration")[["canceled"]].mean().reset_index()
+  churn_contrato['canceled'] = churn_contrato['canceled'] * 100
+  pior_contrato = churn_contrato.loc[churn_contrato['canceled'].idmax()]['contract_duration']
+
+  return {
+    'media_atraso_cancelados': media_atraso_cancelados,
+    'media_atraso_ativos': media_atraso_ativos,
+    'pior_contrato': pior_contrato,
+    'churn_contrato': churn_contrato
+  }
