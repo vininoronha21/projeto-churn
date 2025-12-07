@@ -108,7 +108,16 @@ def formatar_moeda(valor):
   return f"R${valor_formatado}"
 
 def calcular_insight(df):
+  """
+  Calcula insights automáticos sobre os dados
 
+  Args:
+    df: DataFrame com os dados de clientes
+
+  Returns:
+    dict: Dicionário com os insights calculados
+  """
+  
   # Médias de atraso
   media_atraso_cancelados = df[df['canceled'] == CANCELADOS]['days_late'].mean()
   media_atraso_ativos = df[df['canceled'] == ATIVO]['days_late'].mean()
