@@ -29,7 +29,7 @@ st.set_page_config(page_title="Dashboard de Churn", layout="wide")
 @st.cache_data
 def carregar_dados():
   """
-  Carrega os dados de cancelamento do .CSV
+  Carrega os dados de cancelamento do CSV
 
   Returns:
     pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
@@ -133,3 +133,25 @@ def calcular_insight(df):
     'pior_contrato': pior_contrato,
     'churn_contrato': churn_contrato
   }
+
+## Validação de dados
+df = carregar_dados()
+
+# Verifica se o arquivo existe
+if df is None:
+  st.error("ERRO: O arquivo 'cancelamentos.csv' não foi encontrado")
+  st.info("Dica: Rode o script 'gerador_base.py para gerar o arquivo")
+  st.stop()
+
+# Verifica se as colunas necessárias existem
+valido, colunas_faltantes = validar_dados(df)
+
+if not valido:
+  st.error(f"ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
+  st.info("Verifique se o arquivo CSV está no formato correto")
+  st.stop()
+
+# Verifica se há dados
+if len(df) == 0:
+  st.warning("Aviso: O arquivo CSV está vazio!")
+  st.stop()
