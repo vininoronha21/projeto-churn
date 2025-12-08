@@ -139,8 +139,8 @@ df = carregar_dados()
 
 # Verifica se o arquivo existe
 if df is None:
-  st.error("ERRO: O arquivo 'cancelamentos.csv' não foi encontrado")
-  st.info("Dica: Rode o script 'gerador_base.py para gerar o arquivo")
+  st.error("ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
+  st.info("Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
   st.stop()
 
 # Verifica se as colunas necessárias existem
@@ -148,7 +148,7 @@ valido, colunas_faltantes = validar_dados(df)
 
 if not valido:
   st.error(f"ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
-  st.info("Verifique se o arquivo CSV está no formato correto")
+  st.info("Verifique se o arquivo CSV está no formato correto.")
   st.stop()
 
 # Verifica se há dados
