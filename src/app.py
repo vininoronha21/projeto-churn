@@ -139,49 +139,49 @@ df = carregar_dados()
 
 # Verifica se o arquivo existe
 if df is None:
-  st.error("ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
-  st.info("Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
+  st.error("❌ ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
+  st.info("💡 Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
   st.stop()
 
 # Verifica se as colunas necessárias existem
 valido, colunas_faltantes = validar_dados(df)
 
 if not valido:
-  st.error(f"ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
-  st.info("Verifique se o arquivo CSV está no formato correto.")
+  st.error(f"❌ ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
+  st.info("💡 Verifique se o arquivo CSV está no formato correto.")
   st.stop()
 
 # Verifica se há dados
 if len(df) == 0:
-  st.warning("Aviso: O arquivo CSV está vazio!")
+  st.warning("⚠️ Aviso: O arquivo CSV está vazio!")
   st.stop()
   
 ## Interface do Dashboard
-st.title("Análise de Cancelamento de Clientes")
+st.title("📊 Análise de Cancelamento de Clientes")
 st.markdown("Este dashboard foi desenvolvido para analisar motivos prováveis de cancelamentos e possíveis perda de clientes.")
 
 ## I. KPIs Principais
-st.subheader("Métricas Principais")
+st.subheader("📈 Métricas Principais")
 
 metricas = calcular_metricas(df)
 
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric("Base Total", metricas['total'])
-col2.metric("Cancelamentos", metricas['cancelados'])
-col3.metric("Taxa de Churn", f"{metricas['taxa_churn']:.1f}%")
-col4.metric("Receita Perdida", formatar_moeda(metricas['receita_perdida']))
+col1.metric("👥 Base Total", metricas['total'])
+col2.metric("❌ Cancelamentos", metricas['cancelados'])
+col3.metric("📊 Taxa de Churn", f"{metricas['taxa_churn']:.1f}%")
+col4.metric("💰 Receita Perdida", formatar_moeda(metricas['receita_perdida']))
 
 st.divider()
 
 ## II. Dados Brutos
-st.subheader("Quem fica vs Quem sai")
+st.subheader("🔍 Quem fica vs Quem sai")
 
 if st.checkbox("Mostrar dados brutos"):
   st.dataframe(df.head(10)) # Mostra 10 primeiras linhas
 
 ## III. Gráficos de Análise
-st.subheader("Análises Visuais")
+st.subheader("📊 Análises Visuais")
 
 graph1, graph2 = st.columns(2)
 
@@ -253,7 +253,7 @@ with col1:
 with col2:
   st.info("Sobre contratos")
   st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
-  st.warning(f"SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
+  st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
 ## VI. Rodapé
 st.divider()
