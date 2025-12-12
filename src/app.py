@@ -214,6 +214,8 @@ with graph2:
       )
     st.plotly_chart(fig_call, use_container_width=True)
   
+st.divider()  
+
 ## IV. Calcular insights para Análise de Contrato
 st.subheader("Análise por Tipo de Contrato")
 
