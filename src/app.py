@@ -155,3 +155,82 @@ if not valido:
 if len(df) == 0:
   st.warning("Aviso: O arquivo CSV está vazio!")
   st.stop()
+  
+## Interface do Dashboard
+st.title("Análise de Cancelamento de Clientes")
+st.markdown("Este dashboard foi desenvolvido para analisar motivos prováveis de cancelamentos e possíveis perda de clientes.")
+
+## I. KPIs Principais
+st.subheader("Métricas Principais")
+
+metricas = calcular_metricas(df)
+
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Base Total", metricas['total'])
+col2.metric("Cancelamentos", metricas['cancelados'])
+col3.metric("Taxa de Churn", f"{metricas['taxa_churn']:.1f}%")
+col4.metric("Receita Perdida", formatar_moeda(metricas['receita_perdida']))
+
+st.divider()
+
+## II. Dados Brutos
+st.subheader("Quem fica vs Quem sai")
+
+if st.checkbox("Mostrar dados brutos"):
+  st.dataframe(df.head(10)) # Mostra 10 primeiras linhas
+
+## III. Gráficos de Análise
+st.subheader("Análises Visuais")
+
+graph1, graph2 = st.columns(2)
+
+# Gráfico 1: Atraso no Pagamento vs Cancelamento
+with graph1:
+    fig_dias = px.box(
+      df,
+      x='canceled',
+      y='days_late',
+      color='canceled',
+      title="Dias de Atraso no Pagamento",
+      labels={
+        'canceled': "Cancelou? (0=Não, 1=Sim)",
+        'days_late': "Dias de atraso"  
+      },
+      color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
+    )
+    fig_dias.update_layout(showlegend=False)
+    st.plotly_chart(fig_dias, use_container_width=True)
+
+with graph2:
+    fig_call = px.histogram(
+      df, 
+      x="contacts_callcenter", 
+      color="canceled",
+      title="Número de Ligações ao Suporte",
+      barmode="group",
+      labels={"contacts_callcenter": "Nº de Ligações"},
+      color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
+      )
+    st.plotly_chart(fig_call, use_container_width=True)
+  
+st.divider()  
+
+## IV. Calcular insights para Análise de Contrato
+st.subheader("Análise por Tipo de Contrato")
+
+insights = calcular_insight(df)
+
+fig_contrato = px.bar(
+  insights['churn_contrato'],
+  x='contract_duration',
+  y='canceled',
+  title="Taxa de Cancelamento por Duração de Contrato",
+  labels={
+    'canceled': "Taxa de Cancelamento (%)",
+    'contract_duration': "Tipo de Contrato"
+  },
+  color='canceled',
+  color_continuous_scale="#d62728"
+)
+st.plotly_chart(fig_contrato, use_container_width=True)
