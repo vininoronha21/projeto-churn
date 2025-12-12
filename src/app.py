@@ -234,3 +234,27 @@ fig_contrato = px.bar(
   color_continuous_scale="#d62728"
 )
 st.plotly_chart(fig_contrato, use_container_width=True)
+
+## V. Insights Automáticos
+st.divider()
+st.subheader("Insights Automáticos")
+
+col1, col2 = st.columns(2)
+
+with col1:
+  st.info("Sobre atrasos de pagamento")
+  st.write(f"Média de atraso de quem cancela: {insights['media_atraso_cancelados']:.1f} dias")
+  st.write(f"Média de atraso de quem fica: {insights['media_atraso_ativos']:.1f} dias")
+
+  # Alerta se a diferença for significativa
+  if insights['media_atraso_cancelados'] > insights['media_atraso_ativos'] * 2:
+    st.error("CRÍTICO: Clientes que cancelam atrasam o dobro do tempo!")
+
+with col2:
+  st.info("Sobre contratos")
+  st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
+  st.warning(f"SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
+
+## VI. Rodapé
+st.divider()
+st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
