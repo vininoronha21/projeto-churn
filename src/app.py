@@ -213,3 +213,22 @@ with graph2:
       color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
       )
     st.plotly_chart(fig_call, use_container_width=True)
+  
+## IV. Calcular insights para Análise de Contrato
+st.subheader("Análise por Tipo de Contrato")
+
+insights = calcular_insight(df)
+
+fig_contrato = px.bar(
+  insights['churn_contrato'],
+  x='contract_duration',
+  y='canceled',
+  title="Taxa de Cancelamento por Duração de Contrato",
+  labels={
+    'canceled': "Taxa de Cancelamento (%)",
+    'contract_duration': "Tipo de Contrato"
+  },
+  color='canceled',
+  color_continuous_scale="#d62728"
+)
+st.plotly_chart(fig_contrato, use_container_width=True)
