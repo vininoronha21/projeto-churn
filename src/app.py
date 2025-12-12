@@ -83,7 +83,7 @@ def calcular_metricas(df):
   
   clientes_cancelados = df[df['canceled'] == CANCELADOS].shape[0]
   taxa_churn = (clientes_cancelados / total_clientes) * 100
-  receita_perdida = df[df['caneled'] == CANCELADOS]['total_spent'].sum()
+  receita_perdida = df[df['canceled'] == CANCELADOS]['total_spent'].sum()
 
   return {
       'total': total_clientes,
@@ -125,7 +125,7 @@ def calcular_insight(df):
   # Análise por contrato
   churn_contrato = df.groupby("contract_duration")[["canceled"]].mean().reset_index()
   churn_contrato['canceled'] = churn_contrato['canceled'] * 100
-  pior_contrato = churn_contrato.loc[churn_contrato['canceled'].idmax()]['contract_duration']
+  pior_contrato = churn_contrato.loc[churn_contrato['canceled'].idxmax(), 'contract_duration']
 
   return {
     'media_atraso_cancelados': media_atraso_cancelados,
@@ -231,7 +231,7 @@ fig_contrato = px.bar(
     'contract_duration': "Tipo de Contrato"
   },
   color='canceled',
-  color_continuous_scale="#d62728"
+  color_continuous_scale="Reds"
 )
 st.plotly_chart(fig_contrato, use_container_width=True)
 
