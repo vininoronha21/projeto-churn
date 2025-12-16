@@ -8,17 +8,17 @@ ATIVO = 0
 
 ## Colunas que o CSV deve ter (baseado no gerador_base.py)
 COLUNAS_NECESSARIAS = [
-    'id',
-    'age',
-    'gender',
-    'customer_time',
-    'frequency_use',
-    'contacts_callcenter',
-    'days_late',
-    'signature',
-    'contract_duration',
-    'total_spent',
-    'canceled'
+    'id_cliente',
+    'idade',
+    'genero',
+    'tempo_cliente',
+    'frequencia_uso',
+    'contatos_callcenter',
+    'dias_atraso',
+    'assinatura',
+    'duracao_contrato',
+    'total_gasto',
+    'cancelado'
 ]
 
 ## Configurações Iniciais
@@ -81,9 +81,9 @@ def calcular_metricas(df):
         'receita_perdida': 0
     }
   
-  clientes_cancelados = df[df['canceled'] == CANCELADOS].shape[0]
+  clientes_cancelados = df[df['cancelado'] == CANCELADOS].shape[0]
   taxa_churn = (clientes_cancelados / total_clientes) * 100
-  receita_perdida = df[df['canceled'] == CANCELADOS]['total_spent'].sum()
+  receita_perdida = df[df['cancelado'] == CANCELADOS]['total_gasto'].sum()
 
   return {
       'total': total_clientes,
@@ -119,13 +119,13 @@ def calcular_insight(df):
   """
   
   # Médias de atraso
-  media_atraso_cancelados = df[df['canceled'] == CANCELADOS]['days_late'].mean()
-  media_atraso_ativos = df[df['canceled'] == ATIVO]['days_late'].mean()
+  media_atraso_cancelados = df[df['cancelado'] == CANCELADOS]['dias_atraso'].mean()
+  media_atraso_ativos = df[df['cancelado'] == ATIVO]['dias_atraso'].mean()
 
   # Análise por contrato
-  churn_contrato = df.groupby("contract_duration")[["canceled"]].mean().reset_index()
-  churn_contrato['canceled'] = churn_contrato['canceled'] * 100
-  pior_contrato = churn_contrato.loc[churn_contrato['canceled'].idxmax(), 'contract_duration']
+  churn_contrato = df.groupby("duracao_contrato")[["cancelado"]].mean().reset_index()
+  churn_contrato['cancelado'] = churn_contrato['cancelado'] * 100
+  pior_contrato = churn_contrato.loc[churn_contrato['cancelado'].idxmax(), 'duracao_contrato']
 
   return {
     'media_atraso_cancelados': media_atraso_cancelados,
@@ -189,13 +189,13 @@ graph1, graph2 = st.columns(2)
 with graph1:
     fig_dias = px.box(
       df,
-      x='canceled',
-      y='days_late',
-      color='canceled',
+      x='cancelado',
+      y='dias_atraso',
+      color='cancelado',
       title="Dias de Atraso no Pagamento",
       labels={
-        'canceled': "Cancelou? (0=Não, 1=Sim)",
-        'days_late': "Dias de atraso"  
+        'cancelado': "Cancelou? (0=Não, 1=Sim)",
+        'dias_atraso': "Dias de atraso"  
       },
       color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
     )
@@ -205,11 +205,11 @@ with graph1:
 with graph2:
     fig_call = px.histogram(
       df, 
-      x="contacts_callcenter", 
-      color="canceled",
+      x="contatos_callcenter", 
+      color="cancelado",
       title="Número de Ligações ao Suporte",
       barmode="group",
-      labels={"contacts_callcenter": "Nº de Ligações"},
+      labels={"contatos_callcenter": "Nº de Ligações"},
       color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
       )
     st.plotly_chart(fig_call, use_container_width=True)
@@ -223,16 +223,18 @@ insights = calcular_insight(df)
 
 fig_contrato = px.bar(
   insights['churn_contrato'],
-  x='contract_duration',
-  y='canceled',
+  x='duracao_contrato',
+  y='cancelado',
   title="Taxa de Cancelamento por Duração de Contrato",
   labels={
-    'canceled': "Taxa de Cancelamento (%)",
-    'contract_duration': "Tipo de Contrato"
+    'cancelado': "Taxa de Cancelamento (%)",
+    'duracao_contrato': "Tipo de Contrato"
   },
-  color='canceled',
+  color='cancelado',
   color_continuous_scale="Reds"
 )
+
+fig_contrato.update_traces(hovertemplate='Tipo: %{x}<br>Taxa de Churn: %{y:.1f}%<extra></extra>')
 st.plotly_chart(fig_contrato, use_container_width=True)
 
 ## V. Insights Automáticos
