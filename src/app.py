@@ -233,6 +233,8 @@ fig_contrato = px.bar(
   color='canceled',
   color_continuous_scale="Reds"
 )
+
+fig_contrato.update_traces(hovertemplate='Tipo: %{x}<br>Taxa de Churn: %{y:.1f}%<extra></extra>')
 st.plotly_chart(fig_contrato, use_container_width=True)
 
 ## V. Insights Automáticos
