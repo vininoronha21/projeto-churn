@@ -41,6 +41,29 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 - Python 3.9 ou superior
 - pip instalado
 
+## Caso queira gerar bases diferentes para testar
+
+1. No terminal/prompt de comando, navegue até a pasta 'data'
+
+```bash
+cd caminho/para/sua/pasta
+```
+
+2. Rode o gerador para criar o CSV
+
+```bash
+python gerador_base.py
+```
+
+Você vai ver uma mensagem tipo:
+
+```
+✅ Arquivo 'cancelamentos.csv' gerado com sucesso!
+📊 Total de registros: 1000
+❌ Clientes cancelados: 450
+📈 Taxa de churn: 45.0%
+```
+
 ## Instalação
 
 1. Clone o repositório
@@ -87,11 +110,7 @@ streamlit run src/app.py
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-
-
 ---
-
-
 
 # 📊 Churn Analysis Dashboard
 
@@ -135,6 +154,29 @@ This project was developed based on the necessity for companies to clearly and o
 
 - Python 3.9 or higher
 - pip installed
+
+## If you want to generate different datasets for testing
+
+1. In the terminal/command prompt, navigate to the 'data' folder
+
+```bash
+cd path/to/your/folder
+```
+
+2. Run the generator to create the CSV file
+
+```bash
+python gerador_base.py
+```
+
+You will see a message like:
+
+```
+✅ Arquivo 'cancelamentos.csv' gerado com sucesso!
+📊 Total de registros: 1000
+❌ Clientes cancelados: 450
+📈 Taxa de churn: 45.0%
+```
 
 ## Setup
 
