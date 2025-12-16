@@ -34,6 +34,27 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 - **Plotly Express** -> Visualizações intuitivas
 - **Numpy** -> Operações numéricas
 
+## 📁 Estrutura do Projeto
+
+```
+projeto-churn/
+│
+├── data/                    # Dados brutos e processados
+│   ├── cancelamentos.csv    # Dataset de exemplo
+│   └── gerador_base.py      # Gerador de Dataset
+│
+├── src/                    # Código fonte
+│   └── app.py              # Aplicação principal Streamlit
+│
+├── assets/                 # Imagens para documentação
+│   └── screenshots/      
+│
+├── requirements.txt        # Dependências do projeto
+├── .gitignore
+├── LICENSE            
+└── README.md             
+```
+
 ## 🚀 Como Executar
 
 ## Pré-requisitos
@@ -147,6 +168,27 @@ This project was developed based on the necessity for companies to clearly and o
 - **Pandas** -> Data manipulation and analysis
 - **Plotly Express** -> Intuitive and interactive visualizations
 - **Numpy** -> Numerical operations
+
+## 📁 Project Structure
+
+```
+projeto-churn/
+│
+├── data/                    # Raw and processed data
+│   ├── cancelamentos.csv    # Test dataset
+│   └── gerador_base.py      # Dataset Generator
+│
+├── src/                    # Source Code
+│   └── app.py              # Main Application
+│
+├── assets/                 # Images
+│   └── screenshots/  
+│
+├── requirements.txt        # Dependencies
+├── .gitignore
+├── LICENSE        
+└── README.md         
+```
 
 ## 🚀 How to Run
 
