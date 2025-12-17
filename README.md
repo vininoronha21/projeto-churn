@@ -11,9 +11,15 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 - Analisar a receita perdida
 - Gerar insights automáticos para tomada de decisão
 
+## 🖼️ Preview do Dashboard
+
+<img src="assets/screenshots/img_01.png" width="800" alt="Dashboard">
+
+> *Visão geral do dashboard com KPIs principais.*
+
 ## 💡 Funcionalidades
 
-## 📈 KPIs Principais
+## 📈 KPIs
 
 - Total de clientes ativos
 - Taxa de churn mensal/anual
@@ -21,10 +27,12 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 
 ## 🔍 Análises Detalhadas
 
-- Análise de atraso de pagamento
-- Análise de suporte ao cliente
-- Segmentação para identificar grupos de alto risco
-- Insights automáticos
+<img src="assets/screenshots/img_03.png" width="800" alt="Analises">
+
+> - *Análise de atraso de pagamento*
+> - *Análise de suporte ao cliente*
+> - *Segmentação para identificar grupos de alto risco*
+> - *Insights automáticos*
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -47,12 +55,12 @@ projeto-churn/
 │   └── app.py              # Aplicação principal Streamlit
 │
 ├── assets/                 # Imagens para documentação
-│   └── screenshots/      
+│   └── screenshots/  
 │
 ├── requirements.txt        # Dependências do projeto
 ├── .gitignore
-├── LICENSE            
-└── README.md             
+├── LICENSE      
+└── README.md       
 ```
 
 ## 🚀 Como Executar
@@ -146,6 +154,12 @@ This project was developed based on the necessity for companies to clearly and o
 - Analyzing lost revenue
 - Get automated, actionable insights for better decision-making.
 
+## 🖼️ Dashboard Preview
+
+<img src="assets/screenshots/img_01.png" width="800" alt="Dashboard">
+
+> * *Dashboard overview with key KPIs.*
+
 ## 💡 What's Inside?
 
 ## 📈 KPIs
@@ -156,10 +170,12 @@ This project was developed based on the necessity for companies to clearly and o
 
 ## 🔍 Detailed Analysis
 
-- Late Payment Breakdown
-- Customer Support Interaction Analysis
-- High-Risk Customer Segmentation (Who's likely to bail?)
-- Automated Insight Generation
+<img src="assets/screenshots/img_03.png" width="800" alt="Analises">
+
+> - *Late Payment Breakdown*
+> - *Customer Support Interaction Analysis*
+> - *High-Risk Customer Segmentation (Who's likely to bail?)*
+> - *Automated Insight Generation*
 
 ## 🛠️ Tech Stack
 
@@ -186,8 +202,8 @@ projeto-churn/
 │
 ├── requirements.txt        # Dependencies
 ├── .gitignore
-├── LICENSE        
-└── README.md         
+├── LICENSE  
+└── README.md   
 ```
 
 ## 🚀 How to Run
