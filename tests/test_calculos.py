@@ -96,3 +96,38 @@ class TestCalcularMetricas:
 
     assert resultado['taxa_churn'] == 0.0, "Deveria ser 0% de churn"
     assert resultado['receita_perdida'] == 0, "Não perdeu receita"
+
+
+class TestFormatarMoeda:
+  """
+  Testes para a função de formatação de moeda.
+  """
+
+  def test_formatar_valor_simples(self):
+    """
+    Testa formatação de valores simples.
+    """
+    assert formatar_moeda(100) == "R$100,00"
+    assert formatar_moeda(1000) == "R$1.000,00"
+    assert formatar_moeda(1000000) == "R$1.000.000,00"
+  
+  def test_formatar_valor_com_centavos(self):
+    """
+    Testa se os centavos estão formatados corretamente.
+    """
+    assert formatar_moeda(123.45) == "R$123,45"
+    assert formatar_moeda(1234.56) == "R$1.234,56"
+  
+  def test_formatar_zero(self):
+    """
+    Testa formatação do valor zero.
+    """
+    assert formatar_moeda(0) == "R$0,00"
+  
+  def test_formatar_valor_negativo(self):
+    """
+    Testa formatação de valores negativos (caso aconteça uma devolução).
+    """
+    resultado = formatar_moeda(-100)
+    assert "100" in resultado and "-" in resultado
+    
