@@ -130,4 +130,41 @@ class TestFormatarMoeda:
     """
     resultado = formatar_moeda(-100)
     assert "100" in resultado and "-" in resultado
-    
+
+
+  class TestCalcularInsight:
+    """
+    Testes para a função que calcula insights automáticos.
+    """
+
+    def test_calculo_medias_atraso(self):
+      """
+      Testa se as médias de atraso estao sendo calculadas corretamente.
+      """
+
+      dados_teste = pd.DataFrame({
+        'cancelado': [CANCELADOS, CANCELADOS, ATIVO, ATIVO],
+        'dias_atraso': [30, 40, 5, 15],
+        'duracao_contrato': ['Mensal', 'Mensal', 'Anual', 'Anual']
+      })
+
+      insights = calcular_insight(dados_teste)
+
+      assert insights['media_atraso_cancelados'] == 35.0
+      assert insights['media_atraso_ativos'] == 10.0
+
+    def test_identificacao_pior_contrato(self):
+      """
+      Testa se identifica corretamente qual tipo de contrato tem mais churn
+      """
+
+      dados_teste = pd.DataFrame({
+        'cancelado': [1, 1, 0, 0],
+        'dias_atraso': [10, 20, 5, 5],
+        'duracao_contrato': ['Mensal', 'Mensal', 'Anual', 'Anual']
+      })
+
+      insights = calcular_insight(dados_teste)
+
+      assert insights['pior_contrato'] == 'Mensal'
+      
