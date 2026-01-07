@@ -6,3 +6,5 @@ env/
 venv/
 .streamlit/
 .vscode/
+.pytest_cache
+.venv
