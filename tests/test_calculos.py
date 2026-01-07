@@ -49,4 +49,50 @@ class TestCalcularMetricas:
     assert resultado['cancelados'] == 2, "Deveria ter 2 cancelados"
     assert resultado['taxa_churn'] == 50.0, "Taxa de churn deveria ser 50%"
     assert resultado['receita_perdida'] == 200, "Receita perdida deveria ser R$200"
+
+  def test_dataframe_vazio(self):
+    """
+    Testa o comportamento com df vazio.
+
+    Por que é importante? O código pode receber dados vazios, como o CSV pode estar corrompido ou vazio. Precisa-se resolver.
+    """
+
+    dados_vazios = pd.DataFrame(columns=['cancelado', 'total_gasto'])
+
+    resultado = calcular_metricas(dados_vazios)
+
+    # Com 0 clientes = tudo deveria ser 0
+    assert resultado['total'] == 0
+    assert resultado['cancelados'] == 0
+    assert resultado['taxa_churn'] == 0
+    assert resultado['receita_perdida'] == 0
     
+  def test_todos_clientes_cancelaram(self):
+    """
+    Testa cenário extremo: 100% cancelaram.
+    """
+
+    dados_teste = pd.DataFrame({
+      'cancelado': [1, 1, 1],
+      'total_gasto': [100, 200, 300]
+    })
+
+    resultado = calcular_metricas(dados_teste)
+
+    assert resultado['taxa_churn'] == 100.0, "Deveria ser 100% de churn"
+    assert resultado['receita_perdida'] == 600, "Perdeu toda a receita"
+
+  def test_nenhum_cliente_cancelou(self):
+    """
+    Testa o cenário ideal: 0% de cancelamento.
+    """
+
+    dados_teste = pd.DataFrame({
+      'cancelado': [0, 0, 0],
+      'total_gasto': [100, 200, 300]
+    })
+
+    resultado = calcular_metricas(dados_teste)
+
+    assert resultado['taxa_churn'] == 0.0, "Deveria ser 0% de churn"
+    assert resultado['receita_perdida'] == 0, "Não perdeu receita"
