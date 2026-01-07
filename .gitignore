@@ -8,3 +8,4 @@ venv/
 .vscode/
 .pytest_cache
 .venv
+.coverage
