@@ -84,3 +84,52 @@ def gerar_base_churn(n_clientes=1000, caminho_saida='data/cancelamentos.csv'):
                 gasto = np.random.uniform(2000, 10000)
             total_gasto.append(round(gasto, 2))
 
+        # LÓGICA DE CANCELAMENTO (mais realista)
+        # Probabilidade base de cancelar: 20%
+        prob_cancelar = np.ones(n_clientes) * 0.2
+    
+        # Aumenta chance se tiver muito atraso
+        prob_cancelar += (dias_atraso / 60) * 0.5  # +50% se 60 dias de atraso
+    
+        # Aumenta chance se ligar muito pro call center
+        prob_cancelar += (contatos_callcenter / 10) * 0.3  # +30% se 10 ligações
+    
+        # Reduz chance se for cliente antigo
+        prob_cancelar -= (tempo_cliente / 60) * 0.15  # -15% se cliente há 5 anos
+    
+        # Garante que probabilidade fica entre 0 e 1
+        prob_cancelar = np.clip(prob_cancelar, 0, 1)
+    
+        # Gera cancelamentos baseado nas probabilidades
+        cancelados = np.random.binomial(1, prob_cancelar)
+    
+        # Criar DataFrame
+        df = pd.DataFrame({
+            'id_cliente': ids,
+            'data_cadastro': datas_cadastro,
+            'idade': idades,
+            'genero': generos,
+            'tempo_cliente': tempo_cliente,
+            'frequencia_uso': frequencia_uso,
+            'contatos_callcenter': contatos_callcenter,
+            'dias_atraso': dias_atraso,
+            'assinatura': assinaturas,
+            'duracao_contrato': contratos,
+            'total_gasto': total_gasto,
+            'cancelado': cancelados
+        })
+    
+        # Salvar CSV
+        df.to_csv(caminho_saida, index=False)
+    
+        print(f"✅ Base gerada com sucesso!")
+        print(f"📁 Salvo em: {caminho_saida}")
+        print(f"📊 Total de clientes: {len(df)}")
+        print(f"📅 Período dos dados: {df['data_cadastro'].min()} até {df['data_cadastro'].max()}")
+    
+        return df
+
+
+if __name__ == "__main__":
+     # Executar quando rodar: gerador_base.py
+     gerar_base_churn(n_clientes=1000)
