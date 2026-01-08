@@ -258,7 +258,7 @@ st.info(f"📊 Mostrando **{total_filtrado:,}** de **{total_original:,}** client
 if len(df_filtrado) == 0:
     st.warning("⚠️ Nenhum cliente encontrado com os filtros selecionados. Tente ajustar os filtros.")
     st.stop()
-    
+
 ## X. KPIs Principais
 st.subheader("📈 Métricas Principais")
 
@@ -277,7 +277,7 @@ st.divider()
 st.subheader("🔍 Quem fica vs Quem sai")
 
 if st.checkbox("Mostrar dados brutos"):
-  st.dataframe(df.head(10)) # Mostra 10 primeiras linhas
+  st.dataframe(df_filtrado.head(10)) # Mostra 10 primeiras linhas
 
 ## X. Gráficos de Análise
 st.subheader("📊 Análises Visuais")
@@ -287,7 +287,7 @@ graph1, graph2 = st.columns(2)
 # Gráfico 1: Atraso no Pagamento vs Cancelamento
 with graph1:
     fig_dias = px.box(
-      df,
+      df_filtrado,
       x='cancelado',
       y='dias_atraso',
       color='cancelado',
@@ -303,7 +303,7 @@ with graph1:
 
 with graph2:
     fig_call = px.histogram(
-      df, 
+      df_filtrado, 
       x="contatos_callcenter", 
       color="cancelado",
       title="Número de Ligações ao Suporte",
@@ -318,7 +318,7 @@ st.divider()
 ## X. Calcular insights para Análise de Contrato
 st.subheader("Análise por Tipo de Contrato")
 
-insights = calcular_insight(df)
+insights = calcular_insight(df_filtrado)
 
 fig_contrato = px.bar(
   insights['churn_contrato'],
