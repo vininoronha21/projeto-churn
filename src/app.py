@@ -9,6 +9,7 @@ ATIVO = 0
 ## Colunas que o CSV deve ter (baseado no gerador_base.py)
 COLUNAS_NECESSARIAS = [
     'id_cliente',
+    'data_cadastro',
     'idade',
     'genero',
     'tempo_cliente',
