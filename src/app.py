@@ -273,11 +273,9 @@ def converter_coluna_data(df):
   Returns:
     pd.DataFrame: DataFrame com coluna convertida para datetime
   """
+  df = df.copy()
   if 'data_cadastro' in df.columns:
-    # to_datetime converte texto para objeto de data
-    # erros='coerce' transforma datas inválidas em NaT (Not a Time)
-    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce')
-  
+    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce') # erros='coerce' transforma datas inválidas em NaT (Not a Time)   
   return df
 
 
