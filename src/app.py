@@ -29,135 +29,135 @@ st.set_page_config(page_title="Dashboard de Churn", layout="wide")
 ## Funções Auxiliares
 @st.cache_data
 def carregar_dados():
-  """
-  Carrega os dados de cancelamento do CSV
+    """
+    Carrega os dados de cancelamento do CSV
 
-  Returns:
-    pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
-  """
-  try:
-    dados = pd.read_csv("data/cancelamentos.csv")
-    return dados
-  except FileNotFoundError:
-    return None
+    Returns:
+      pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
+    """
+    try:
+        dados = pd.read_csv("data/cancelamentos.csv")
+        return dados
+    except FileNotFoundError:
+        return None
 
 
 def validar_dados(df):
-  """
-  Verifica se o DataFrame possui todas as colunas necessárias
+    """
+    Verifica se o DataFrame possui todas as colunas necessárias
 
-  Args:
-    df: DataFrame a ser validado
-  
-  Returns:
-    tuple: (bool, list) - (é válido?, lista de colunas faltantes)
-  """
-  if df is None:
-    return False, []
-  
-  colunas_faltantes = [col for col in COLUNAS_NECESSARIAS if col not in df.columns]
+    Args:
+      df: DataFrame a ser validado
+    
+    Returns:
+      tuple: (bool, list) - (é válido?, lista de colunas faltantes)
+    """
+    if df is None:
+        return False, []
+    
+    colunas_faltantes = [col for col in COLUNAS_NECESSARIAS if col not in df.columns]
 
-  if colunas_faltantes:
-    return False, colunas_faltantes
-  
-  return True, []
+    if colunas_faltantes:
+        return False, colunas_faltantes
+    
+    return True, []
 
 
 def calcular_metricas(df):
-  """
-  Calcula as métricas principais do dashboard
-  
-  Args:
-    df: DataFrame com os dados de clientes
+    """
+    Calcula as métricas principais do dashboard
+    
+    Args:
+      df: DataFrame com os dados de clientes
 
-  Returns:
-    dict: Dicionário com as métricas calculadas
-  """
-  total_clientes = len(df)
+    Returns:
+      dict: Dicionário com as métricas calculadas
+    """
+    total_clientes = len(df)
 
-  # Previne divisão por zero
-  if total_clientes == 0:
+    # Previne divisão por zero
+    if total_clientes == 0:
+        return {
+            'total': 0,
+            'cancelados': 0,
+            'taxa_churn': 0,
+            'receita_perdida': 0
+        }
+    
+    clientes_cancelados = df[df['cancelado'] == CANCELADOS].shape[0]
+    taxa_churn = (clientes_cancelados / total_clientes) * 100
+    receita_perdida = df[df['cancelado'] == CANCELADOS]['total_gasto'].sum()
+
     return {
-        'total': 0,
-        'cancelados': 0,
-        'taxa_churn': 0,
-        'receita_perdida': 0
+        'total': total_clientes,
+        'cancelados': clientes_cancelados,
+        'taxa_churn': taxa_churn,
+        'receita_perdida': receita_perdida
     }
-  
-  clientes_cancelados = df[df['cancelado'] == CANCELADOS].shape[0]
-  taxa_churn = (clientes_cancelados / total_clientes) * 100
-  receita_perdida = df[df['cancelado'] == CANCELADOS]['total_gasto'].sum()
-
-  return {
-      'total': total_clientes,
-      'cancelados': clientes_cancelados,
-      'taxa_churn': taxa_churn,
-      'receita_perdida': receita_perdida
-  }
 
 
 def formatar_moeda(valor):
-  """
-  Formata valor em reais (R$)
+    """
+    Formata valor em reais (R$)
 
-  Args:
-    valor: Valor numérico a ser formatado
+    Args:
+      valor: Valor numérico a ser formatado
 
-  Returns:
-    str: Valor formatado como moeda BRL 
-  """
-  
-  valor_formatado = f"{valor:,.2f}" # Utilizando f-string para formatar com 2 casas decimais e separadores
-  valor_formatado = valor_formatado.replace(',', '_').replace('.', ',').replace('_', '.') # Utilizando replace para converter ao padrao brasileiro (1.000,00)
-  return f"R${valor_formatado}"
+    Returns:
+      str: Valor formatado como moeda BRL 
+    """
+    
+    valor_formatado = f"{valor:,.2f}" # Utilizando f-string para formatar com 2 casas decimais e separadores
+    valor_formatado = valor_formatado.replace(',', '_').replace('.', ',').replace('_', '.') # Utilizando replace para converter ao padrao brasileiro (1.000,00)
+    return f"R${valor_formatado}"
 
 
 def calcular_insight(df):
-  """
-  Calcula insights automáticos sobre os dados
+    """
+    Calcula insights automáticos sobre os dados
 
-  Args:
-    df: DataFrame com os dados de clientes
+    Args:
+      df: DataFrame com os dados de clientes
 
-  Returns:
-    dict: Dicionário com os insights calculados
-  """
-  
-  # Médias de atraso
-  media_atraso_cancelados = df[df['cancelado'] == CANCELADOS]['dias_atraso'].mean()
-  media_atraso_ativos = df[df['cancelado'] == ATIVO]['dias_atraso'].mean()
+    Returns:
+      dict: Dicionário com os insights calculados
+    """
+    
+    # Médias de atraso
+    media_atraso_cancelados = df[df['cancelado'] == CANCELADOS]['dias_atraso'].mean()
+    media_atraso_ativos = df[df['cancelado'] == ATIVO]['dias_atraso'].mean()
 
-  # Análise por contrato
-  churn_contrato = df.groupby("duracao_contrato")[["cancelado"]].mean().reset_index()
-  churn_contrato['cancelado'] = churn_contrato['cancelado'] * 100
-  pior_contrato = churn_contrato.loc[churn_contrato['cancelado'].idxmax(), 'duracao_contrato']
+    # Análise por contrato
+    churn_contrato = df.groupby("duracao_contrato")[["cancelado"]].mean().reset_index()
+    churn_contrato['cancelado'] = churn_contrato['cancelado'] * 100
+    pior_contrato = churn_contrato.loc[churn_contrato['cancelado'].idxmax(), 'duracao_contrato']
 
-  return {
-    'media_atraso_cancelados': media_atraso_cancelados,
-    'media_atraso_ativos': media_atraso_ativos,
-    'pior_contrato': pior_contrato,
-    'churn_contrato': churn_contrato
-  }
+    return {
+        'media_atraso_cancelados': media_atraso_cancelados,
+        'media_atraso_ativos': media_atraso_ativos,
+        'pior_contrato': pior_contrato,
+        'churn_contrato': churn_contrato
+    }
 
 
 def converter_coluna_data(df):
-  """
-  Converte a coluna 'data_cadastro' para o tipo de datetime do pandas
+    """
+    Converte a coluna 'data_cadastro' para o tipo de datetime do pandas
 
-  Por que é importante?
-  - Pandas precisa saber que é uma data para ser filtrada
-  - Sem conversão, a coluna é tratada como texto
+    Por que é importante?
+    - Pandas precisa saber que é uma data para ser filtrada
+    - Sem conversão, a coluna é tratada como texto
 
-  Args:
-    df: DataFrame com coluna 'data_cadastro' como string
+    Args:
+      df: DataFrame com coluna 'data_cadastro' como string
 
-  Returns:
-    pd.DataFrame: DataFrame com coluna convertida para datetime
-  """
-  df = df.copy()
-  if 'data_cadastro' in df.columns:
-    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce') # erros='coerce' transforma datas inválidas em NaT (Not a Time)   
-  return df
+    Returns:
+      pd.DataFrame: DataFrame com coluna convertida para datetime
+    """
+    df = df.copy()
+    if 'data_cadastro' in df.columns:
+        df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce') # erros='coerce' transforma datas inválidas em NaT (Not a Time)   
+    return df
 
 
 ## Validação de dados
@@ -165,9 +165,9 @@ df = carregar_dados()
 
 # Verifica se o arquivo existe
 if df is None:
-  st.error("❌ ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
-  st.info("💡 Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
-  st.stop()
+    st.error("❌ ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
+    st.info("💡 Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
+    st.stop()
 
 # Converter coluna de data
 df = converter_coluna_data(df)
@@ -176,15 +176,15 @@ df = converter_coluna_data(df)
 valido, colunas_faltantes = validar_dados(df)
 
 if not valido:
-  st.error(f"❌ ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
-  st.info("💡 Verifique se o arquivo CSV está no formato correto.")
-  st.stop()
+    st.error(f"❌ ERRO: Colunas faltantes no CSV: {', '.join(colunas_faltantes)}")
+    st.info("💡 Verifique se o arquivo CSV está no formato correto.")
+    st.stop()
 
 # Verifica se há dados
 if len(df) == 0:
-  st.warning("⚠️ Aviso: O arquivo CSV está vazio!")
-  st.stop()
-  
+    st.warning("⚠️ Aviso: O arquivo CSV está vazio!")
+    st.stop()
+    
 ## Interface do Dashboard
 st.title("📊 Análise de Cancelamento de Clientes")
 st.markdown("Este dashboard foi desenvolvido para analisar motivos prováveis de cancelamentos e possíveis perda de clientes.")
@@ -231,7 +231,7 @@ if data_inicial > data_final:
     st.error("⚠️ Erro: A data inicial não pode ser posterior à data final!")
     st.stop()
 
-## X. Aplicar filtros no DataFrame
+## I. Aplicar filtros no DataFrame
 
 # Converter data_inicial e data_final para datetime
 data_inicial_dt = pd.to_datetime(data_inicial)
@@ -245,7 +245,7 @@ df_filtrado = df[
 
 # Filtro por tipo de contrato
 if filtro_contrato != 'Todos':
-   df_filtrado = df_filtrado[df_filtrado['duracao_contrato'] == filtro_contrato]
+    df_filtrado = df_filtrado[df_filtrado['duracao_contrato'] == filtro_contrato]
 
 # Mostrar informações sobre os filtros aplicados
 total_original = len(df)
@@ -259,7 +259,7 @@ if len(df_filtrado) == 0:
     st.warning("⚠️ Nenhum cliente encontrado com os filtros selecionados. Tente ajustar os filtros.")
     st.stop()
 
-## X. KPIs Principais
+## II. KPIs Principais
 st.subheader("📈 Métricas Principais")
 
 metricas = calcular_metricas(df)
@@ -273,13 +273,13 @@ col4.metric("💰 Receita Perdida", formatar_moeda(metricas['receita_perdida']))
 
 st.divider()
 
-## X. Dados Brutos
+## III. Dados Brutos
 st.subheader("🔍 Quem fica vs Quem sai")
 
 if st.checkbox("Mostrar dados brutos"):
-  st.dataframe(df_filtrado.head(10)) # Mostra 10 primeiras linhas
+    st.dataframe(df_filtrado.head(10)) # Mostra 10 primeiras linhas
 
-## X. Gráficos de Análise
+## IV. Gráficos de Análise
 st.subheader("📊 Análises Visuais")
 
 graph1, graph2 = st.columns(2)
@@ -287,75 +287,75 @@ graph1, graph2 = st.columns(2)
 # Gráfico 1: Atraso no Pagamento vs Cancelamento
 with graph1:
     fig_dias = px.box(
-      df_filtrado,
-      x='cancelado',
-      y='dias_atraso',
-      color='cancelado',
-      title="Dias de Atraso no Pagamento",
-      labels={
-        'cancelado': "Cancelou? (0=Não, 1=Sim)",
-        'dias_atraso': "Dias de atraso"  
-      },
-      color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
+        df_filtrado,
+        x='cancelado',
+        y='dias_atraso',
+        color='cancelado',
+        title="Dias de Atraso no Pagamento",
+        labels={
+            'cancelado': "Cancelou? (0=Não, 1=Sim)",
+            'dias_atraso': "Dias de atraso"  
+        },
+        color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
     )
     fig_dias.update_layout(showlegend=False)
     st.plotly_chart(fig_dias, use_container_width=True)
 
 with graph2:
     fig_call = px.histogram(
-      df_filtrado, 
-      x="contatos_callcenter", 
-      color="cancelado",
-      title="Número de Ligações ao Suporte",
-      barmode="group",
-      labels={"contatos_callcenter": "Nº de Ligações"},
-      color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
-      )
+        df_filtrado, 
+        x="contatos_callcenter", 
+        color="cancelado",
+        title="Número de Ligações ao Suporte",
+        barmode="group",
+        labels={"contatos_callcenter": "Nº de Ligações"},
+        color_discrete_map={ATIVO: "#2ca02c", CANCELADOS: "#d62728"}
+    )
     st.plotly_chart(fig_call, use_container_width=True)
   
 st.divider()  
 
-## X. Calcular insights para Análise de Contrato
+## V. Calcular insights para Análise de Contrato
 st.subheader("Análise por Tipo de Contrato")
 
 insights = calcular_insight(df_filtrado)
 
 fig_contrato = px.bar(
-  insights['churn_contrato'],
-  x='duracao_contrato',
-  y='cancelado',
-  title="Taxa de Cancelamento por Duração de Contrato",
-  labels={
-    'cancelado': "Taxa de Cancelamento (%)",
-    'duracao_contrato': "Tipo de Contrato"
-  },
-  color='cancelado',
-  color_continuous_scale="Reds"
+    insights['churn_contrato'],
+    x='duracao_contrato',
+    y='cancelado',
+    title="Taxa de Cancelamento por Duração de Contrato",
+    labels={
+        'cancelado': "Taxa de Cancelamento (%)",
+        'duracao_contrato': "Tipo de Contrato"
+    },
+    color='cancelado',
+    color_continuous_scale="Reds"
 )
 
 fig_contrato.update_traces(hovertemplate='Tipo: %{x}<br>Taxa de Churn: %{y:.1f}%<extra></extra>')
 st.plotly_chart(fig_contrato, use_container_width=True)
 
-## X. Insights Automáticos
+## VI. Insights Automáticos
 st.divider()
 st.subheader("Insights Automáticos")
 
 col1, col2 = st.columns(2)
 
 with col1:
-  st.info("Sobre atrasos de pagamento")
-  st.write(f"Média de atraso de quem cancela: {insights['media_atraso_cancelados']:.1f} dias")
-  st.write(f"Média de atraso de quem fica: {insights['media_atraso_ativos']:.1f} dias")
+    st.info("Sobre atrasos de pagamento")
+    st.write(f"Média de atraso de quem cancela: {insights['media_atraso_cancelados']:.1f} dias")
+    st.write(f"Média de atraso de quem fica: {insights['media_atraso_ativos']:.1f} dias")
 
-  # Alerta se a diferença for significativa
-  if insights['media_atraso_cancelados'] > insights['media_atraso_ativos'] * 2:
-    st.error("CRÍTICO: Clientes que cancelam atrasam o dobro do tempo!")
+    # Alerta se a diferença for significativa
+    if insights['media_atraso_cancelados'] > insights['media_atraso_ativos'] * 2:
+        st.error("CRÍTICO: Clientes que cancelam atrasam o dobro do tempo!")
 
 with col2:
-  st.info("Sobre contratos")
-  st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
-  st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
+    st.info("Sobre contratos")
+    st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
+    st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
-## X. Rodapé
+## VII. Rodapé
 st.divider()
 st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
