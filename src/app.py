@@ -189,7 +189,77 @@ if len(df) == 0:
 st.title("📊 Análise de Cancelamento de Clientes")
 st.markdown("Este dashboard foi desenvolvido para analisar motivos prováveis de cancelamentos e possíveis perda de clientes.")
 
-## I. KPIs Principais
+## X. Filtros
+st.subheader("🔍 Filtros de Análise")
+
+# Criar colunas para organizar os filtros lado a lado
+col_filtro1, col_filtro2, col_filtro3 = st.columns(3)
+
+with col_filtro1:
+    data_minima = df['data_cadastro'].min().date()
+    data_maxima = df['data_cadastro'].max().date()
+
+    data_inicial = st.date_input(
+        "📅 Data Inicial",
+        value=data_minima,
+        min_value=data_minima,
+        max_value=data_maxima,
+        help="Selecione a data inicial para filtrar os dados"
+    )
+
+with col_filtro2:
+    data_final = st.date_input(
+        "📅 Data Final",
+        value=data_maxima,
+        min_value=data_minima,
+        max_value=data_maxima,
+        help="Selecione a data final para filtrar os dados"
+    )
+
+with col_filtro3:
+    # Filtro adicional: tipo de contratro
+    # Obtém todos os tipos únicos de contrato
+    tipos_contrato = ['Todos'] + sorted(df['duracao_contrato'].unique().tolist())
+
+    filtro_contrato = st.selectbox(
+        "📋 Tipo de Contrato",
+        options=tipos_contrato,
+        help="Filtre por tipo de contrato específico"
+    )
+
+if data_inicial > data_final:
+    st.error("⚠️ Erro: A data inicial não pode ser posterior à data final!")
+    st.stop()
+
+## X. Aplicar filtros no DataFrame
+
+# Converter data_inicial e data_final para datetime
+data_inicial_dt = pd.to_datetime(data_inicial)
+data_final_dt = pd.to_datetime(data_final)
+
+# Filtro por data
+df_filtrado = df[
+    (df['data_cadastro'] >= data_inicial_dt) & 
+    (df['data_cadastro'] <= data_final_dt)
+].copy()  # .copy() cria uma cópia para evitar warnings do pandas
+
+# Filtro por tipo de contrato
+if filtro_contrato != 'Todos':
+   df_filtrado = df_filtrado[df_filtrado['duracao_contrato'] == filtro_contrato]
+
+# Mostrar informações sobre os filtros aplicados
+total_original = len(df)
+total_filtrado = len(df_filtrado)
+percentual = (total_filtrado / total_original * 100) if total_original > 0 else 0
+
+st.info(f"📊 Mostrando **{total_filtrado:,}** de **{total_original:,}** clientes ({percentual:.1f}%)")
+
+# Se não houver dados após filtrar, mostrar aviso
+if len(df_filtrado) == 0:
+    st.warning("⚠️ Nenhum cliente encontrado com os filtros selecionados. Tente ajustar os filtros.")
+    st.stop()
+    
+## X. KPIs Principais
 st.subheader("📈 Métricas Principais")
 
 metricas = calcular_metricas(df)
@@ -203,13 +273,13 @@ col4.metric("💰 Receita Perdida", formatar_moeda(metricas['receita_perdida']))
 
 st.divider()
 
-## II. Dados Brutos
+## X. Dados Brutos
 st.subheader("🔍 Quem fica vs Quem sai")
 
 if st.checkbox("Mostrar dados brutos"):
   st.dataframe(df.head(10)) # Mostra 10 primeiras linhas
 
-## III. Gráficos de Análise
+## X. Gráficos de Análise
 st.subheader("📊 Análises Visuais")
 
 graph1, graph2 = st.columns(2)
@@ -245,7 +315,7 @@ with graph2:
   
 st.divider()  
 
-## IV. Calcular insights para Análise de Contrato
+## X. Calcular insights para Análise de Contrato
 st.subheader("Análise por Tipo de Contrato")
 
 insights = calcular_insight(df)
@@ -266,7 +336,7 @@ fig_contrato = px.bar(
 fig_contrato.update_traces(hovertemplate='Tipo: %{x}<br>Taxa de Churn: %{y:.1f}%<extra></extra>')
 st.plotly_chart(fig_contrato, use_container_width=True)
 
-## V. Insights Automáticos
+## X. Insights Automáticos
 st.divider()
 st.subheader("Insights Automáticos")
 
@@ -286,6 +356,6 @@ with col2:
   st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
   st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
-## VI. Rodapé
+## X. Rodapé
 st.divider()
 st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
