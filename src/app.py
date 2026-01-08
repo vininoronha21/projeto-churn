@@ -258,6 +258,29 @@ with col2:
   st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
   st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
-## VI. Rodapé
+
+def converter_coluna_data(df):
+  """
+  Converte a coluna 'data_cadastro' para o tipo de datetime do pandas
+
+  Por que é importante?
+  - Pandas precisa saber que é uma data para ser filtrada
+  - Sem conversão, a coluna é tratada como texto
+
+  Args:
+    df: DataFrame com coluna 'data_cadastro' como string
+
+  Returns:
+    pd.DataFrame: DataFrame com coluna convertida para datetime
+  """
+  if 'data_cadastro' in df.columns:
+    # to_datetime converte texto para objeto de data
+    # erros='coerce' transforma datas inválidas em NaT (Not a Time)
+    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce')
+  
+  return df
+
+
 st.divider()
 st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
+
