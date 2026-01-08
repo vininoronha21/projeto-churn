@@ -41,6 +41,7 @@ def carregar_dados():
   except FileNotFoundError:
     return None
 
+
 def validar_dados(df):
   """
   Verifica se o DataFrame possui todas as colunas necessárias
@@ -60,6 +61,7 @@ def validar_dados(df):
     return False, colunas_faltantes
   
   return True, []
+
 
 def calcular_metricas(df):
   """
@@ -93,6 +95,7 @@ def calcular_metricas(df):
       'receita_perdida': receita_perdida
   }
 
+
 def formatar_moeda(valor):
   """
   Formata valor em reais (R$)
@@ -107,6 +110,7 @@ def formatar_moeda(valor):
   valor_formatado = f"{valor:,.2f}" # Utilizando f-string para formatar com 2 casas decimais e separadores
   valor_formatado = valor_formatado.replace(',', '_').replace('.', ',').replace('_', '.') # Utilizando replace para converter ao padrao brasileiro (1.000,00)
   return f"R${valor_formatado}"
+
 
 def calcular_insight(df):
   """
@@ -135,6 +139,27 @@ def calcular_insight(df):
     'churn_contrato': churn_contrato
   }
 
+
+def converter_coluna_data(df):
+  """
+  Converte a coluna 'data_cadastro' para o tipo de datetime do pandas
+
+  Por que é importante?
+  - Pandas precisa saber que é uma data para ser filtrada
+  - Sem conversão, a coluna é tratada como texto
+
+  Args:
+    df: DataFrame com coluna 'data_cadastro' como string
+
+  Returns:
+    pd.DataFrame: DataFrame com coluna convertida para datetime
+  """
+  df = df.copy()
+  if 'data_cadastro' in df.columns:
+    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce') # erros='coerce' transforma datas inválidas em NaT (Not a Time)   
+  return df
+
+
 ## Validação de dados
 df = carregar_dados()
 
@@ -143,6 +168,9 @@ if df is None:
   st.error("❌ ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
   st.info("💡 Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
   st.stop()
+
+# Converter coluna de data
+df = converter_coluna_data(df)
 
 # Verifica se as colunas necessárias existem
 valido, colunas_faltantes = validar_dados(df)
@@ -258,27 +286,6 @@ with col2:
   st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
   st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
-
-def converter_coluna_data(df):
-  """
-  Converte a coluna 'data_cadastro' para o tipo de datetime do pandas
-
-  Por que é importante?
-  - Pandas precisa saber que é uma data para ser filtrada
-  - Sem conversão, a coluna é tratada como texto
-
-  Args:
-    df: DataFrame com coluna 'data_cadastro' como string
-
-  Returns:
-    pd.DataFrame: DataFrame com coluna convertida para datetime
-  """
-  df = df.copy()
-  if 'data_cadastro' in df.columns:
-    df['data_cadastro'] = pd.to_datetime(df['data_cadastro'], errors='coerce') # erros='coerce' transforma datas inválidas em NaT (Not a Time)   
-  return df
-
-
+## VI. Rodapé
 st.divider()
 st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
-
