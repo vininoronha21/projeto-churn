@@ -382,7 +382,26 @@ fig_temporal.update_traces(
     hovertemplate='<b>%{x}</b><br>Taxa de Churn: %{y:.1f}%<extra></extra>'
 )
 
+fig_temporal.add_hline(
+    y=25,
+    line_dash="dash",
+    line_color="green",
+    annotation_text="Meta: 25%",
+    annotation_position="right"
+)
+
 st.plotly_chart(fig_temporal, use_container_width=True)
+
+# Mostrar tabela com os dados
+with st.expander("📊 Ver dados detalhados por mês"):
+    st.dataframe(
+        cancelamentos_por_mes.style.format({
+            'taxa_churn': '{:.1f}%',
+            'cancelados': '{:.0f}',
+            'total_clientes': '{:.0f}'
+        }),
+        use_container_width=True
+    )
 
 ## VII. Insights Automáticos
 st.divider()
