@@ -336,7 +336,55 @@ fig_contrato = px.bar(
 fig_contrato.update_traces(hovertemplate='Tipo: %{x}<br>Taxa de Churn: %{y:.1f}%<extra></extra>')
 st.plotly_chart(fig_contrato, use_container_width=True)
 
-## VI. Insights Automáticos
+## VI. Evolução temporal de cancelmanentos
+st.divider()
+st.subheader("📈 Evolução de Cancelamentos no Tempo")
+
+# Agrupar dados por mês
+# 'M' = agrupar p/ mês (Month)
+# 'ME' = fim do mês (Month End)
+df_temporal = df_filtrado.copy()
+df_temporal['mes'] = df_temporal['data_cadastro'].dt.to_period('M')
+
+cancelamentos_por_mes = df_temporal.groupby('mes').agg({
+    'cancelado': ['sum', 'count'] # sum = total cancelados, count = total clientes
+}).reset_index()
+
+# Renomear colunas para facilitar
+cancelamentos_por_mes.columns = ['mes', 'cancelados', 'total_clientes']
+
+# Cálculo da taxa churn mensal
+cancelamentos_por_mes['taxa_churn'] = (
+    cancelamentos_por_mes['cancelados'] /
+    cancelamentos_por_mes['total_clientes'] * 100
+)
+
+# Converter Period para string
+cancelamentos_por_mes['mes'] = cancelamentos_por_mes['mes'].astype(str)
+
+# Criar gráfico de linha
+fig_temporal = px.line(
+    cancelamentos_por_mes,
+    x='mes',
+    y='taxa_churn',
+    title="Taxa de Churn Mensal (%)",
+    labels={
+        'mes': 'Mês/Ano',
+        'taxa_churn': 'Taxa de Churn (%)'
+    },
+    markers=True
+)
+
+# Personalizar gráfico
+fig_temporal.update_traces(
+    line_color='#d62728',  # Vermelho
+    line_width=3,
+    hovertemplate='<b>%{x}</b><br>Taxa de Churn: %{y:.1f}%<extra></extra>'
+)
+
+st.plotly_chart(fig_temporal, use_container_width=True)
+
+## VII. Insights Automáticos
 st.divider()
 st.subheader("Insights Automáticos")
 
@@ -356,6 +404,6 @@ with col2:
     st.write(f"O tipo de contrato com maior rejeição é: {insights['pior_contrato']}")
     st.warning(f"🚨 SUGESTÃO: Criar incentivos para migrar clientes do {insights['pior_contrato']} para outros planos")
 
-## VII. Rodapé
+## VIII. Rodapé
 st.divider()
 st.caption("Dashboard feito por Vinícius Forte com Streamlit 🚀")
