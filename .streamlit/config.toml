@@ -15,3 +15,7 @@ enableXsrfProtection = true # Proteção contra ataques CSRF
 [browser]
 # Config do navegador
 gatherUsageStats = false # Não coletar estatística de uso
+
+[client]
+showErrorDetails = false
+toolbarMode = "minimal"
