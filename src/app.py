@@ -23,7 +23,30 @@ COLUNAS_NECESSARIAS = [
 ]
 
 ## Configurações Iniciais
-st.set_page_config(page_title="Dashboard de Churn", layout="wide")
+st.set_page_config(
+    page_title="Dashboard de Churn | Vinícius Forte",  # Título da aba
+    page_icon="💡",  # Emoji que aparece na aba
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://github.com/vininoronha21/projeto-churn',
+        'Report a bug': 'https://github.com/vininoronha21/projeto-churn/issues',
+        'About': '''
+        
+        Este projeto foi desenvolvido como parte dos meus estudos em:
+        - Análise e Desenvolvimento Web com Python
+        - Manipulação de dados com Pandas
+        - Visualização com Plotly
+        - Criação de dashboards interativos
+        
+        📧 Email: contatovininoronha@gmail.com\n
+        💼 [LinkedIn](https://linkedin.com/in/viniciusnoronha)\n  
+        🐙 [GitHub](https://github.com/vininoronha21)\n
+    
+        Desenvolvido por **Vinícius Forte**
+        '''
+    }
+)
 
 
 ## Detectar se é mobile
