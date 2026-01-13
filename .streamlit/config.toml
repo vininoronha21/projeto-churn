@@ -1,0 +1,20 @@
+## Configurações do Streamlit para Deploy
+# Este arquivo personaliza a aparência e comportamento do app
+
+[theme]
+# Cores do tema (personalize como quiser)
+primaryColor = "#FF6B6B"  # Cor principal (botões, links)
+backgroundColor = "#FFFFFF"  # Fundo da página
+secondaryBackgroundColor = "#F0F2F6"  # Fundo de sidebars e containers
+textColor = "#262730"  # Cor do texto
+
+[server]
+# Config do servidor
+headless = true # Roda sem interface gráfica (necessário para Cloud)
+port = 8501
+enableCORS = false # Desabilita CORS
+enableXsrfProtection = true # Proteção contra ataques CSRF
+
+[browser]
+# Config do navegador
+gatherUsageStats = false # Não coletar estatística de uso
