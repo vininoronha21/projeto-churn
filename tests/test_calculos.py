@@ -132,6 +132,7 @@ class TestFormatarMoeda:
     assert "100" in resultado and "-" in resultado
 
 
+
   class TestCalcularInsight:
     """
     Testes para a função que calcula insights automáticos.
@@ -168,3 +169,42 @@ class TestFormatarMoeda:
 
       assert insights['pior_contrato'] == 'Mensal'
       
+
+class TestConverterColunaData:
+  """
+  Testes para a função de conversão de datas.
+  """
+
+  def test_conversao_data_valida(self):
+    """
+    Testa se converte strings de data corretamente.
+    """
+
+    df_teste = pd.DataFrame({
+      'data_cadastro': ['2024-01-01', '2024-06-20', '2025-12-30']
+    })
+
+    from app import converter_coluna_data
+    df_convertido = converter_coluna_data(df_teste)
+
+    # Verifica se a coluna é do tipo datetime
+    assert pd.api.types.is_datetime64_any_dtype(df_convertido['data_cadastro'])
+    assert df_convertido['data_cadastro'].notna().all()
+
+  def test_conversaodata_invalida(self):
+    """
+    Testa comportamento com datas inválidas.
+    """
+
+    df_teste = pd.DataFrame({
+      'data_cadastro': ['2024-01-01' 'data_invalida', '2025-99-99']
+    })
+
+    from app import converter_coluna_data
+    df_convertido = converter_coluna_data(df_teste)
+
+    # Primeira linha deve ser válida
+    assert pd.notna(df_convertido.loc[0, 'data_cadastro'])
+    # Linhas 2 e 3 devem ser NaT (Not a Time)
+    assert pd.isna(df_convertido.loc[1, 'data_cadastro'])
+    assert pd.isna(df_convertido.loc[2, 'data_cadastro'])
