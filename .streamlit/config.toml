@@ -1,0 +1,21 @@
+## Configurações do Streamlit para Deploy
+# Este arquivo personaliza a aparência e comportamento do app
+
+[theme]
+# Personalizar cores do tema
+base = "auto"
+
+[server]
+# Config do servidor
+headless = true # Roda sem interface gráfica (necessário para Cloud)
+port = 8501
+enableCORS = false # Desabilita CORS
+enableXsrfProtection = true # Proteção contra ataques CSRF
+
+[browser]
+# Config do navegador
+gatherUsageStats = false # Não coletar estatística de uso
+
+[client]
+showErrorDetails = false
+toolbarMode = "minimal"

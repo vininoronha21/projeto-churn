@@ -26,6 +26,20 @@ COLUNAS_NECESSARIAS = [
 st.set_page_config(page_title="Dashboard de Churn", layout="wide")
 
 
+## Detectar se é mobile
+is_mobile = st.session_state.get('mobile', False)
+
+if st.sidebar.checkbox("Modo Mobile"):
+    is_mobile = True
+    st.session_state.mobile = True
+
+## Adaptar layout para mobile
+if is_mobile:
+    st.columns(1)
+else:
+    st.columns(4)
+
+
 ## Funções Auxiliares
 @st.cache_data
 def carregar_dados():
