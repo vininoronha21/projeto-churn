@@ -39,3 +39,4 @@ Thumbs.db
 .streamlit/secrets.toml
 *.tmp
 *.log
+.devcontainer
