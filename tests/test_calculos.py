@@ -14,7 +14,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 # Agora é possível importar as funções do app.py
-from app import calcular_metricas, formatar_moeda, calcular_insight, CANCELADOS, ATIVO
+from streamlit_app import calcular_metricas, formatar_moeda, calcular_insight, CANCELADOS, ATIVO
 
 
 class TestCalcularMetricas:
@@ -184,7 +184,7 @@ class TestConverterColunaData:
       'data_cadastro': ['2024-01-01', '2024-06-20', '2025-12-30']
     })
 
-    from app import converter_coluna_data
+    from streamlit_app import converter_coluna_data
     df_convertido = converter_coluna_data(df_teste)
 
     # Verifica se a coluna é do tipo datetime
@@ -200,7 +200,7 @@ class TestConverterColunaData:
       'data_cadastro': ['2024-01-01' 'data_invalida', '2025-99-99']
     })
 
-    from app import converter_coluna_data
+    from streamlit_app import converter_coluna_data
     df_convertido = converter_coluna_data(df_teste)
 
     # Primeira linha deve ser válida
