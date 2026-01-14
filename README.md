@@ -86,6 +86,58 @@ projeto-churn/
 - [ ] Autenticação de usuários
 - [ ] Integração com banco de dados (PostgreSQL)
 
+## 📦 Instalação
+
+### Pré-requisitos
+
+- Python 3.11 ou superior
+- pip (gerenciador de pacotes Python)
+- Git
+
+### Passo a passo
+
+#### 1. Clone o repositório
+
+```bash
+git clone https://github.com/vininoronha21/projeto-churn.git
+cd projeto-churn
+```
+
+#### 2. Crie um ambiente virtual (recomendado)
+
+```bash
+# Criar ambiente virtual
+python -m venv venv
+
+# Ativar no Windows:
+venv\Scripts\activate
+
+# Ativar no Linux/Mac:
+source venv/bin/activate
+```
+
+#### 3. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Gere os dados de exemplo
+
+```bash
+python src/gerador_base.py
+```
+
+Este comando criará o arquivo `data/cancelamentos.csv` com 1000 clientes fictícios.
+
+#### 5. Execute o dashboard
+
+```bash
+streamlit run streamlit_app.py
+```
+
+O dashboard abrirá automaticamente no navegador em `http://localhost:8501`
+
 ## 🧪 Executar Testes
 
 ```bash
