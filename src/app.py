@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 ## CONSTANTES - Valores fixos para simplificação
 CANCELADOS = 1
@@ -72,11 +73,13 @@ def carregar_dados():
     Returns:
       pd.DataFrame: DataFrame com dados de clientes, ou None se houver erro
     """
-    try:
-        dados = pd.read_csv("data/cancelamentos.csv")
-        return dados
-    except FileNotFoundError:
+    BASE_DIR = Path(__file__).resolve().parents[1]
+    caminho_csv = BASE_DIR / "data" / "cancelamentos.csv"
+
+    if not caminho_csv.exists():
         return None
+
+    return pd.read_csv(caminho_csv)
 
 
 def validar_dados(df):
@@ -202,8 +205,8 @@ df = carregar_dados()
 
 # Verifica se o arquivo existe
 if df is None:
-    st.error("❌ ERRO: O arquivo 'cancelamentos.csv' não foi encontrado.")
-    st.info("💡 Dica: Rode o script 'gerador_base.py' para gerar o arquivo.")
+    st.error("❌ ERRO: Arquivo data/cancelamentos.csv não encontrado.")
+    st.info("💡 Verifique se o arquivo está versionado no GitHub.")
     st.stop()
 
 # Converter coluna de data
