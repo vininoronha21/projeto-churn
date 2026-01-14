@@ -8,7 +8,7 @@ O Streamlit Cloud requer um arquivo na raiz do projeto.
 import sys
 from pathlib import Path
 
-src_path = Path(__file__).parent / "src"
-sys.path.insert(0, str(src_path))
+current_dir = Path(__file__).parent
+sys.path.insert(0, str(current_dir))
 
-import app
+from src import app
