@@ -1,8 +1,12 @@
-# 📊 Dashboard de Análise de Churn - Previsão de Cancelamento de Clientes
+# 📊 Dashboard Análise de Churn - Previsão de Cancelamento de Clientes | (PT-BR)
 
-> Dashboard interativo desenvolvido em Python para análise e previsão de Churn, permitindo identificar padrões de cancelamento e reduzir a perda de clientes.
+---
 
-🔗 **[Acesse o dashboard online](https://sua-url.streamlit.app)**
+> Dashboard interativo desenvolvido em Python e hospedado em Streamlit Cloud para análise e previsão de Churn, permitindo identificar padrões de cancelamento e reduzir a perda de clientes.
+
+🔗 **[Acesse o dashboard online](https://dashboard-churn.streamlit.app)**
+
+---
 
 ## 🎯 Sobre o projeto
 
@@ -13,32 +17,59 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 - Analisar a receita perdida
 - Gerar insights automáticos para tomada de decisão
 
+---
+
 ## 📸 Preview do Dashboard
 
-<img src="" width="800" alt="Dashboard">
+<img src="assets/screenshots/tela_inicio.png" width="900" alt="Dashboard">
 
 > *Visão geral do dashboard com KPIs principais.*
 
+---
+
 ## ✨ Funcionalidades
 
-### 📈 Análise de Dados
+### 📈 KPIs Principais
 
-- **KPIs Principais**: Visualização total dos clientes, cancelamentos, taxa de churn e receita perdida
-- **Dados Brutos**: Visualização opcional da base de dados completa
-- **Insights Automáticos**: Insights que identificam padrões críticos
+> Visualização total dos clientes, cancelamentos, taxa de churn e receita perdida
+
+<img src="assets/screenshots/analise_visual.png" width="700" alt="Dashboard">
+
+### 🎲 Dados Brutos
+
+> Visualização opcional da base de dados completa
+
+<img src="assets/screenshots/dados_brutos.png" width="700" alt="Dashboard">
+
+### 💭 Insights Automáticos
+
+> Insights que identificam padrões críticos e sugerem ações
+
+<img src="assets/screenshots/insights.png" width="700" alt="Dashboard">
 
 ### 📊 Visualizações Interativas
 
 - **Análise de Atraso de Pagamento**: Box Plot comparando dias de atraso entre clientes ativos e cancelados
 - **Contatos com Call Center**: Histograma mostrando relação entre ligações ao suporte e cancelamento
 - **Taxa por Tipo de Contrato**: Gráfico de barras identificando contratos com maior cancelamento
-- **Evolução Temporal**: Linha do tempo mostrando tendências de cancelamento ao longo dos meses
+
+<img src="assets/screenshots/analise_tipo_contrato.png" width="700" alt="Dashboard">
+
+### 🔼 Evolução Temporal
+
+> Linha do tempo mostrando tendências de cancelamento ao longo dos meses com uma possível meta
+
+<img src="assets/screenshots/evolucao.png" width="700" alt="Dashboard">
 
 ### 🎛️ Controles e Filtros
 
 - **Filtro de Datas**: Seleção de período personalizado (data inicial e final)
 - **Filtro por Contrato**: Análise focada em tipos específicos de contrato (Mensal, Trimestral, Anual)
 - **Validação Inteligente**: Sistema que previne seleção de datas inválidas
+
+<img src="assets/screenshots/filtro.png" width="700" alt="Dashboard">
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -49,34 +80,42 @@ Este projeto nasceu da necessidade das empresas compreenderem, de forma clara e 
 ![Numpy](https://img.shields.io/badge/Numpy-2.3.5-blue?logo=numpy&logoColor=white)
 ![Pytest](https://img.shields.io/badge/Pytest-7.3.3-black?logo=pytest&logoColor=white)
 
+---
+
 ## 📂 Estrutura do Projeto
 
 ```
 projeto-churn/
+├── .devcontainer/           # Docker
+│   └── devcontainer.json    # Ambiente de desenvolvimento
+│
 ├── .streamlit/              # Configurações do Streamlit
 │   └── config.toml          # Tema e configurações do servidor
+│
+├──assets/                   # Pasta com recursos estáticos 
+│  └── screenshots/          # Screenshots do projeto
 │
 ├── data/                    # Dados do projeto
 │   └── cancelamentos.csv    # Base de dados de clientes (gerada)
 │
 ├── src/                     # Código fonte principal
-│   ├── __init__.py         # Inicializador do pacote
-│   ├── app.py              # Aplicação principal do dashboard
-│   ├── theme.py            # Sistema de temas claro/escuro
-│   └── gerador_base.py     # Script para gerar dados sintéticos
+│   ├── __init__.py          # Inicializador do pacote
+│   └── gerador_base.py      # Script para gerar dados fictícios
 │
 ├── tests/                   # Testes automatizados
-│   ├── __init__.py
-│   ├── test_calculos.py    # Testes de funções de cálculo
-│   ├── test_validacoes.py  # Testes de validação de dados
-│   └── test_theme.py       # Testes do sistema de temas
+│   ├── __init__.py  
+│   ├── test_calculos.py     # Testes de funções de cálculo
+│   └── test_validacoes.py   # Testes de validação de dados
 │
-├── .gitignore              # Arquivos ignorados pelo Git
-├── streamlit_app.py        # Ponto de entrada para Streamlit Cloud
-├── requirements.txt        # Dependências do projeto
-├── runtime.txt             # Versão do Python para deploy
-└── README.md               # Este arquivo
+├── .gitignore               # Arquivos ignorados pelo Git
+├── LICENSE                  # Licença
+├── README_EN.md             # English Doc
+├── README.md                # Documentação
+├── requirements.txt         # Dependências do projeto
+└── streamlit_app.py         # Raíz do projeto
 ```
+
+---
 
 ## 💻 Melhorias Futuras
 
@@ -86,7 +125,9 @@ projeto-churn/
 - [ ] Autenticação de usuários
 - [ ] Integração com banco de dados (PostgreSQL)
 
-## 📦 Instalação
+---
+
+## 🚀 Como Executar
 
 ### Pré-requisitos
 
@@ -122,10 +163,19 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-#### 4. Gere os dados de exemplo
+#### 4. Rode o gerador para criar o CSV
 
 ```bash
-python src/gerador_base.py
+python gerador_base.py
+```
+
+Você vai ver uma mensagem tipo:
+
+```
+✅ Base gerada com sucesso!
+📁 Salvo em: {caminho_saida}
+📊 Total de clientes: {XXXX}
+📅 Período dos dados: {XXXX-XX-XX} até {XXXX-XX-XX}
 ```
 
 Este comando criará o arquivo `data/cancelamentos.csv` com 1000 clientes fictícios.
@@ -136,7 +186,7 @@ Este comando criará o arquivo `data/cancelamentos.csv` com 1000 clientes fictí
 streamlit run streamlit_app.py
 ```
 
-O dashboard abrirá automaticamente no navegador em `http://localhost:8501`
+---
 
 ## 🧪 Executar Testes
 
@@ -177,14 +227,18 @@ tests/test_validacoes.py .....                                                 [
 - [Plotly](https://plotly.com/python/)
 - [Pytest](https://docs.pytest.org/)
 
-## 👨‍💻 Autor
-
-Desenvolvido por **Vinícius Noronha**
-
-- 🐙 GitHub: [vininoronha21](https://github.com/vininoronha21)
-- 💼 LinkedIn: [Vinícius Noronha](https://linkedin.com/in/viniciusnoronha)
-- 📧 Email: contatovininoronha@gmail.com
+---
 
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Vinícius Forte**
+
+- 🐙 GitHub: [vininoronha21](https://github.com/vininoronha21)
+- 💼 LinkedIn: [Vinícius Noronha](https://linkedin.com/in/viniciusnoronha)
+- 📧 Email: contatovininoronha@gmail.com
