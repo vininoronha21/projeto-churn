@@ -197,7 +197,7 @@ class TestConverterColunaData:
     """
 
     df_teste = pd.DataFrame({
-      'data_cadastro': ['2024-01-01' 'data_invalida', '2025-99-99']
+      'data_cadastro': ['2024-01-01', 'data_invalida', '2025-99-99']
     })
 
     from streamlit_app import converter_coluna_data
